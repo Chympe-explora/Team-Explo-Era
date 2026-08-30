@@ -193,6 +193,61 @@
 
   function money(n) { return "₹" + Number(n || 0).toLocaleString("en-IN"); }
 
+  // Same idea as ImageSlider, but sized/bordered to match the waterfall
+  // photo card (4:3, rounded-16px, dark bg) and able to show the
+  // "No Photo Yet" badge when hasPhoto is false.
+  function WaterfallPhoto(props) {
+    var images = (props.images || []).filter(Boolean);
+    var idxState = useState(0);
+    var idx = idxState[0], setIdx = idxState[1];
+
+    useEffect(function () {
+      if (images.length < 2) return undefined;
+      var timer = setInterval(function () {
+        setIdx(function (i) { return (i + 1) % images.length; });
+      }, 4000);
+      return function () { clearInterval(timer); };
+    }, [images.length]);
+
+    var safeIdx = images.length > 0 ? idx % images.length : 0;
+
+    return h(
+      "div", { className: "rounded-[16px] overflow-hidden border border-white/10 aspect-[4/3] bg-black/30 relative" },
+      images.length > 0 && h("img", { key: safeIdx, src: images[safeIdx], className: "w-full h-full object-cover" }),
+      !props.hasPhoto && h(
+        "div", { className: "absolute top-3 right-3 px-3 py-1 rounded-full bg-black/60 backdrop-blur text-[11px] border border-white/20 flex items-center gap-1.5" },
+        h(CameraOff, { size: 12 }), "No Photo Yet"
+      ),
+      images.length > 1 && h(
+        "div", { className: "absolute inset-0 flex items-center justify-between px-2" },
+        h(
+          "button",
+          {
+            onClick: function () { setIdx(function (i) { return (i - 1 + images.length) % images.length; }); },
+            className: "w-7 h-7 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center text-white",
+            "aria-label": "Previous photo"
+          },
+          h(ArrowLeft, { size: 14 })
+        ),
+        h(
+          "button",
+          {
+            onClick: function () { setIdx(function (i) { return (i + 1) % images.length; }); },
+            className: "w-7 h-7 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center text-white",
+            "aria-label": "Next photo"
+          },
+          h(ArrowRight, { size: 14 })
+        )
+      ),
+      images.length > 1 && h(
+        "div", { className: "absolute bottom-1.5 inset-x-0 flex justify-center gap-1.5" },
+        images.map(function (_, i) {
+          return h("span", { key: i, className: "w-1.5 h-1.5 rounded-full " + (i === safeIdx ? "bg-white" : "bg-white/40") });
+        })
+      )
+    );
+  }
+
   // A small auto-sliding photo strip. Give it a list of image file names
   // via the "images" prop (e.g. from a highlight's images: [...] list in
   // config.js) and it slides to the next one every few seconds. Shows
@@ -756,7 +811,7 @@
             var icons = { mappin: MapPin, calendar: CalendarIcon, users: Users, backpack: Backpack, shield: Shield, leaf: Leaf };
             var Icon = icons[card.icon] || Mountain;
             return h(
-              "div", { key: card.title, className: "rounded-[18px] bg-white/5 border border-white/10 p-5" },
+              "div", { key: card.title, className: "" },
               h(
                 "div", { className: "flex items-center gap-3 mb-3" },
                 h("div", { className: "w-9 h-9 rounded-lg bg-emerald-500/20 flex items-center justify-center flex-shrink-0" }, h(Icon, { size: 18, className: "text-emerald-400" })),
@@ -839,8 +894,9 @@
             var mapsUrl = wf.mapLink && wf.mapLink.trim()
               ? wf.mapLink
               : (wf.lat != null && wf.lng != null ? "https://www.google.com/maps?q=" + wf.lat + "," + wf.lng : "");
+            var wfImages = (wf.images && wf.images.length > 0) ? wf.images : [wf.image];
             return h(
-              "div", { key: wf.title, className: "rounded-[20px] bg-white/5 border border-white/10 p-6 md:p-8 grid md:grid-cols-2 gap-6 items-start" },
+              "div", { key: wf.title, className: "grid md:grid-cols-2 gap-6 items-start pt-6 border-t border-white/10 first:pt-0 first:border-t-0" },
               h(
                 "div", null,
                 h(
@@ -853,14 +909,7 @@
               ),
               h(
                 "div", null,
-                h(
-                  "div", { className: "rounded-[16px] overflow-hidden border border-white/10 aspect-[4/3] bg-black/30 relative" },
-                  h("img", { src: wf.image, className: "w-full h-full object-cover" }),
-                  !wf.hasPhoto && h(
-                    "div", { className: "absolute top-3 right-3 px-3 py-1 rounded-full bg-black/60 backdrop-blur text-[11px] border border-white/20 flex items-center gap-1.5" },
-                    h(CameraOff, { size: 12 }), "No Photo Yet"
-                  )
-                ),
+                h(WaterfallPhoto, { images: wfImages, hasPhoto: wf.hasPhoto }),
                 mapsUrl
                   ? h("a", { href: mapsUrl, target: "_blank", rel: "noopener noreferrer", className: "mt-3 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#2E8B57] hover:bg-[#257a4b] text-sm font-medium" }, h(MapPin, { size: 14 }), "Open in Google Maps", h(ExternalLink, { size: 12 }))
                   : h("div", { className: "mt-3 w-full text-center px-4 py-2.5 rounded-full bg-white/5 border border-white/10 text-xs text-white/40" }, "Map link not added yet")
@@ -910,7 +959,7 @@
         h(
           "div", { className: "mt-8 grid md:grid-cols-2 gap-6" },
           h(
-            "div", { className: "rounded-[18px] bg-white/5 border border-white/10 p-6" },
+            "div", { className: "md:pr-6" },
             h(
               "div", { className: "flex items-center gap-3 mb-4" },
               h("div", { className: "w-9 h-9 rounded-lg bg-emerald-500/20 flex items-center justify-center flex-shrink-0" }, h(Mountain, { size: 18, className: "text-emerald-400" })),
@@ -924,7 +973,7 @@
             )
           ),
           h(
-            "div", { className: "rounded-[18px] bg-white/5 border border-white/10 p-6" },
+            "div", { className: "md:pl-6 md:border-l md:border-white/10" },
             h(
               "div", { className: "flex items-center gap-3 mb-4" },
               h("div", { className: "w-9 h-9 rounded-lg bg-emerald-500/20 flex items-center justify-center flex-shrink-0" }, h(Shield, { size: 18, className: "text-emerald-400" })),

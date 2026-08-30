@@ -84,7 +84,7 @@
   // ============================================================
   window.KC_IMAGES = {
     // Rotating homepage background photos
-    heroBg1: "cloud-sea-viewpoint.jpg",
+    heroBg1: "hero-river-aerial.jpg",
     heroBg2: "hero-bg-2.jpg",
 
     heroSide: "hero-side.jpg",
@@ -95,11 +95,12 @@
     guide: "guide.jpg",
     logo: "logo.png",
 
+    // ---- Highlight photo (About The Wilderness Expedition section) ----
+    highlightRiverCrossing: "highlight-river-crossing.jpg",
+
     // ---- Waterfall photos ----
-    // Butterfly Falls and Langam Falls: you mentioned you have real
-    // photos for these — once you upload them, put their filenames
-    // here instead.
     waterfallButterfly: "waterfall-butterfly.jpg",
+    waterfallButterfly2: "waterfall-butterfly-2.jpg",
     waterfallLangam: "waterfall-langam.jpg",
     // Linching Falls & the Unnamed Waterfall: no photo exists yet on
     // purpose (per your instructions) — these stay as the "no
@@ -107,14 +108,14 @@
     waterfallLinching: "waterfall-linching.jpg",
     waterfallUnnamed: "waterfall-unnamed.jpg",
 
-    // ---- Gallery photos — all placeholders, swap in real photos ----
+    // ---- Gallery photos ----
     gallery0: "gallery-route.jpg",
     gallery1: "gallery-waterfall.jpg",
     gallery2: "gallery-trek.jpg",
     gallery3: "gallery-camp.jpg",
     gallery4: "gallery-river.jpg",
-    gallery5: "gallery-rocks.jpg",
-    gallery6: "gallery-forest.jpg",
+    gallery5: "gallery-trek2.jpg",
+    gallery6: "gallery-route2.jpg",
     gallery7: "gallery-camp2.jpg",
 
     // Your UPI payment QR code image (kept from the existing brand)
@@ -192,7 +193,7 @@
           icon: "mountain",
           label: "Not A Conventional Sightseeing Tour",
           description: "This is a six-day journey into the remote landscapes of Meghalaya, beginning at Brichyrnot Village and continuing from Khaddum into forests, rivers, rocky terrain and secluded wilderness camps.",
-          images: []
+          images: [window.KC_IMAGES.highlightRiverCrossing]
         },
         {
           icon: "water",
@@ -228,6 +229,7 @@
           subtitle: "The hidden waterfall, found while gathering firewood",
           story: "Butterfly Falls is a hidden waterfall discovered during an earlier exploration of the area. According to the explorer's account, the waterfall was not noticed during the main exploration — it was found later, while the explorer was searching the surrounding area for firewood after planning to camp nearby. The large number of butterflies around the waterfall inspired its name.",
           image: window.KC_IMAGES.waterfallButterfly,
+          images: [window.KC_IMAGES.waterfallButterfly, window.KC_IMAGES.waterfallButterfly2],
           hasPhoto: true, // set to false and it will show the "no photo" style instead
           // Paste the Google Maps share link for this location here:
           mapLink: ""
