@@ -756,7 +756,7 @@
             var icons = { mappin: MapPin, calendar: CalendarIcon, users: Users, backpack: Backpack, shield: Shield, leaf: Leaf };
             var Icon = icons[card.icon] || Mountain;
             return h(
-              "div", { key: card.title, className: "rounded-[18px] bg-white/5 border border-white/10 p-5" },
+              "div", { key: card.title, className: "" },
               h(
                 "div", { className: "flex items-center gap-3 mb-3" },
                 h("div", { className: "w-9 h-9 rounded-lg bg-emerald-500/20 flex items-center justify-center flex-shrink-0" }, h(Icon, { size: 18, className: "text-emerald-400" })),
@@ -838,7 +838,7 @@
           "div", { className: "mt-8 grid md:grid-cols-2 gap-5" },
           WHY_VISIT.journeys.map(function (j) {
             return h(
-              "div", { key: j.number, className: "rounded-[18px] bg-white/5 border border-white/10 p-6" },
+              "div", { key: j.number, className: "" },
               h(
                 "div", { className: "flex items-center gap-3" },
                 h("span", { className: "text-2xl" }, j.emoji),
@@ -864,7 +864,7 @@
         h(
           "div", { className: "mt-8 grid md:grid-cols-2 gap-6" },
           h(
-            "div", { className: "rounded-[18px] bg-white/5 border border-white/10 p-6" },
+            "div", { className: "md:pr-6" },
             h(
               "div", { className: "flex items-center gap-3 mb-4" },
               h("div", { className: "w-9 h-9 rounded-lg bg-emerald-500/20 flex items-center justify-center flex-shrink-0" }, h(Mountain, { size: 18, className: "text-emerald-400" })),
@@ -878,7 +878,7 @@
             )
           ),
           h(
-            "div", { className: "rounded-[18px] bg-white/5 border border-white/10 p-6" },
+            "div", { className: "md:pl-6 md:border-l md:border-white/10" },
             h(
               "div", { className: "flex items-center gap-3 mb-4" },
               h("div", { className: "w-9 h-9 rounded-lg bg-emerald-500/20 flex items-center justify-center flex-shrink-0" }, h(Shield, { size: 18, className: "text-emerald-400" })),
