@@ -156,15 +156,35 @@
               "div", { className: "p-6 flex flex-col flex-1" },
               h("h3", { className: "text-lg font-semibold" }, d.name),
               h("p", { className: "mt-3 text-white/70 text-sm leading-relaxed flex-1" }, d.description),
-              h("button", { onClick: function () { goTo("booking"); }, className: "mt-6 w-full bg-[#2E8B57] hover:bg-[#257a4b] py-3 rounded-full text-sm font-semibold" }, d.buttonLabel || "Book Now")
+              h("button", { onClick: function () { if (d.link) { window.location.href = d.link; } else { goTo("booking"); } }, className: "mt-6 w-full bg-[#2E8B57] hover:bg-[#257a4b] py-3 rounded-full text-sm font-semibold" }, d.buttonLabel || "Book Now")
             )
           );
         })
       )
     );
 
-    // ---- Experiences ---------------------------------------------------
-    var EXP = CONTENT.experiences || { title: "Experiences", subtitle: "", items: [] };
+    // ---- Experiences — grouped by destination --------------------------
+    var EXP = CONTENT.experiences || { title: "Experiences", subtitle: "", groups: [] };
+    function experienceGroup(group, gi) {
+      return h(
+        "div", { key: gi, className: gi > 0 ? "mt-10" : "" },
+        h("h3", { className: "text-base md:text-lg font-semibold text-white/90" }, group.name),
+        h(
+          "div", { className: "mt-4 grid md:grid-cols-3 gap-5" },
+          (group.items || []).map(function (item, i) {
+            return h(
+              GlassCard, { key: i, className: "overflow-hidden" },
+              item.image && h("img", { src: item.image, className: "w-full h-[140px] object-cover" }),
+              h(
+                "div", { className: "p-5" },
+                h("h4", { className: "font-semibold text-[15px]" }, item.title),
+                item.description && h("p", { className: "mt-2 text-white/70 text-sm leading-relaxed" }, item.description)
+              )
+            );
+          })
+        )
+      );
+    }
     var experiences = h(
       "section", { id: "experiences", className: "scroll-mt-24" },
       h(
@@ -172,20 +192,7 @@
         h("h2", { className: "text-2xl md:text-3xl font-bold tracking-tight" }, EXP.title),
         EXP.subtitle && h("p", { className: "mt-1 text-white/60 text-sm" }, EXP.subtitle)
       ),
-      h(
-        "div", { className: "grid md:grid-cols-3 gap-5" },
-        (EXP.items || []).map(function (item, i) {
-          return h(
-            GlassCard, { key: i, className: "overflow-hidden" },
-            item.image && h("img", { src: item.image, className: "w-full h-[140px] object-cover" }),
-            h(
-              "div", { className: "p-5" },
-              h("h3", { className: "font-semibold text-[15px]" }, item.title),
-              item.description && h("p", { className: "mt-2 text-white/70 text-sm leading-relaxed" }, item.description)
-            )
-          );
-        })
-      )
+      (EXP.groups || []).map(experienceGroup)
     );
 
     // ---- Booking (empty — to fill in later) ----------------------------

@@ -33,3 +33,4 @@
 .h-\[140px\]{height:140px}
 .max-w-\[720px\]{max-width:720px}
 .space-y-16 > :not([hidden]) ~ :not([hidden]){margin-top:4rem}
+.mt-10{margin-top:2.5rem}

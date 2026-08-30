@@ -110,29 +110,41 @@
           name: "Krem Chympe Waterfall & Cave",
           image: window.KC_IMAGES.kremChympeCard,
           description: "Book a guided package tour to Krem Chympe. A forest trek from Khaddum Village leads to the Chympe (Pieltleng) Waterfall and into the Krem Chympe cave system — one of Meghalaya's longest, with underground pools, golden mineral formations, and rare cave wildlife.",
-          buttonLabel: "Book Now"
+          buttonLabel: "Book Now",
+          link: "krem-chympe/index.html"
         },
         {
           id: "wilderness-expedition",
           name: "Wilderness Expedition",
           image: window.KC_IMAGES.wildernessCard,
           description: "Book the 6-day Wilderness Expedition — a multi-day journey deep into Meghalaya's backcountry, trekking to waterfalls and landscapes most visitors never reach, with camping along the way.",
-          buttonLabel: "Book Now"
+          buttonLabel: "Book Now",
+          link: "wilderness-expedition/index.html"
         }
       ]
     },
 
-    // ---- Experiences ----
+    // ---- Experiences — grouped by which destination they come from ----
     experiences: {
       title: "Experiences",
       subtitle: "What our team can offer",
-      items: [
-        { title: "Cave Exploration", description: "Guided descents into Krem Chympe's chambers, pools, and formations.", image: window.KC_IMAGES.exp1 },
-        { title: "Multi-Day Camping", description: "Overnight and multi-day camps out in the wilderness, guide included.", image: window.KC_IMAGES.exp2 },
-        { title: "Bamboo River Rafting", description: "A calmer way to take in the valley, on the river.", image: window.KC_IMAGES.exp3 },
-        { title: "Guided Trekking", description: "Forest trails to waterfalls, caves, and viewpoints, at your pace.", image: window.KC_IMAGES.exp4 },
-        { title: "Rock & Landscape Tours", description: "Limestone formations and viewpoints most tourists never see.", image: window.KC_IMAGES.exp5 },
-        { title: "Waterfall Visits", description: "Swimming and photo stops at Meghalaya's hidden waterfalls.", image: window.KC_IMAGES.exp6 }
+      groups: [
+        {
+          name: "From the Krem Chympe Visit",
+          items: [
+            { title: "Cave Exploration", description: "Guided descents into Krem Chympe's chambers, pools, and formations.", image: window.KC_IMAGES.exp1 },
+            { title: "Waterfall Visits", description: "Swimming and photo stops at the Chympe (Pieltleng) Waterfall.", image: window.KC_IMAGES.exp6 },
+            { title: "Guided Trekking", description: "Forest trail from Khaddum Village to the waterfall and cave, at your pace.", image: window.KC_IMAGES.exp4 }
+          ]
+        },
+        {
+          name: "From the Wilderness Expedition",
+          items: [
+            { title: "Multi-Day Camping", description: "Overnight camps out in the wilderness across the 6-day route, guide included.", image: window.KC_IMAGES.exp2 },
+            { title: "Bamboo River Rafting", description: "A calmer way to take in the valley, on the river.", image: window.KC_IMAGES.exp3 },
+            { title: "Rock & Landscape Tours", description: "Limestone formations and viewpoints most tourists never see.", image: window.KC_IMAGES.exp5 }
+          ]
+        }
       ]
     },
 
