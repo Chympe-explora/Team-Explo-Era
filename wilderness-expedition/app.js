@@ -1607,11 +1607,11 @@
       h(
         GlassCard, { className: "max-w-[1280px] mx-auto px-4 py-3 flex justify-between items-center pointer-events-auto" },
         h("button", {
-          disabled: page === 1,
           onClick: function () {
+            if (page === 1) { window.location.href = "../index.html"; return; }
             setPage(Math.max(1, page - 1));
           },
-          className: "px-5 py-2 rounded-full bg-white/10 border border-white/10 text-sm flex items-center gap-2 disabled:opacity-40"
+          className: "px-5 py-2 rounded-full bg-white/10 border border-white/10 text-sm flex items-center gap-2"
         }, h(ArrowLeft, { size: 16 }), t("back", " Back")),
         page === 1 && h("button", {
           onClick: function () { setPage(2); },
