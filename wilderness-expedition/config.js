@@ -84,7 +84,7 @@
   // ============================================================
   window.KC_IMAGES = {
     // Rotating homepage background photos
-    heroBg1: "hero-bg-1.jpg",
+    heroBg1: "cloud-sea-viewpoint.jpg",
     heroBg2: "hero-bg-2.jpg",
 
     heroSide: "hero-side.jpg",
@@ -262,60 +262,57 @@
       ]
     },
 
-    // ---- "Why To Go" — the journey cards ----
+    // ---- "Why Go" — full narrative section (replaces the old journey
+    // cards). Content is a list of blocks rendered top to bottom:
+    //   { type: "heading",  text: "..." }
+    //   { type: "paragraph", text: "..." }
+    //   { type: "list", items: ["...", "..."] }
+    //   { type: "quote", text: "...", attribution: "— Name" }
+    //   { type: "divider" }
     whyVisit: {
-      title: "WHY GO ON THIS EXPEDITION?",
-      subtitle: "Not A Sightseeing Trip. A Six-Day Journey Into The Wilderness.",
-      intro: "From Brichyrnot Village to the Meghalaya–Assam border, this expedition moves through thick jungle, rivers, rocky terrain and secluded wilderness camps — toward waterfalls that are known mainly through local exploration and hunter knowledge.",
-      journeys: [
-        {
-          emoji: "🚙",
-          number: "01",
-          title: "The Journey Begins Off-Road",
-          tagline: "Leave the familiar road behind.",
-          description: "The expedition starts at Brichyrnot Village and continues by 4×4 jeep to Khaddum Village, where the paved road ends and the wilderness begins.",
-          experience: ["4×4 Jeep", "Brichyrnot → Khaddum"]
-        },
-        {
-          emoji: "🥾",
-          number: "02",
-          title: "On Foot, Into The Forest",
-          tagline: "The trek becomes the journey.",
-          description: "From Khaddum, the route continues on foot toward Radeh — through forest trail, changing terrain, and landscapes that gradually leave the usual tourist trail behind.",
-          experience: ["Forest Trekking", "Khaddum → Radeh"]
-        },
-        {
-          emoji: "🗺️",
-          number: "03",
-          title: "Toward The Border",
-          tagline: "Rarely visited ground.",
-          description: "The route moves from Radeh toward the Meghalaya–Assam border — remote, offbeat terrain known mainly through local exploration rather than any marked tourist trail.",
-          experience: ["Remote Trail", "Radeh → Assam Border"]
-        },
-        {
-          emoji: "🦋",
-          number: "04",
-          title: "A Hidden Discovery",
-          tagline: "Found while searching for firewood.",
-          description: "Butterfly Falls is a hidden waterfall that wasn't even noticed during the original exploration of the area — only found afterward, while searching nearby for firewood.",
-          experience: ["Butterfly Falls", "Hidden Waterfall"]
-        },
-        {
-          emoji: "🌫️",
-          number: "05",
-          title: "An Unsettling, Fascinating Place",
-          tagline: "Isolation, unfamiliarity, disorientation.",
-          description: "Langam Falls carries the name hunters gave it after their first impression of the place — a mix of isolation and fascination that still defines the spot today.",
-          experience: ["Langam Falls", "Locally Known"]
-        },
-        {
-          emoji: "🌊",
-          number: "06",
-          title: "The Final Discovery Point",
-          tagline: "Known only through hunter knowledge.",
-          description: "The expedition reaches Linching Falls, then continues roughly 3 km further to an unnamed waterfall with no official photograph and no established name — the wilderness's final secluded destination.",
-          experience: ["Linching Falls", "The Unnamed Waterfall", "Wilderness Camping"]
-        }
+      title: "WHY GO FOR WILDERNESS EXPEDITION",
+      blocks: [
+        { type: "heading", text: "Step Outside the Ordinary" },
+        { type: "paragraph", text: "Most people will never know what it feels like to be truly alive. Not the kind of alive that comes from a workout or a weekend getaway. The kind that comes from your heartbeat being the only sound for miles. The kind that comes from building fire with your own hands, not a lighter." },
+        { type: "paragraph", text: "This isn't a tour. This is a return." },
+        { type: "list", items: [
+          "Trade screens for survival. No notifications. No emails. Just you, the canopy, and instincts you forgot you had.",
+          "Earn your meals. Not from a menu. From your own skill, your own effort, your own two hands.",
+          "Find silence that actually silences. The jungle doesn't ask about your job title. It doesn't care about your deadlines. It just asks you to be present.",
+          "Come back with more than photos. Come back with a scar, a story, and a version of yourself that knows what it can survive."
+        ] },
+
+        { type: "heading", text: "Come Back Changed" },
+        { type: "paragraph", text: "The jungle doesn't care about your resume. It doesn't care about your mortgage, your Instagram followers, or that email you've been dreading to send. It cares about one thing: whether you can survive." },
+        { type: "paragraph", text: "Most of your life has been cushioned. Heated. Delivered to your door. This isn't a complaint\u2014it's an observation. And if you're honest with yourself, you already know something is missing." },
+        { type: "quote", text: "The wilderness is not a luxury but a necessity of the human spirit.", attribution: "\u2014 Edward Abbey" },
+
+        { type: "divider" },
+        { type: "paragraph", text: "This isn't a vacation. It's a reckoning." },
+        { type: "paragraph", text: "There's no cell service. No room service. No Wi-Fi. Just you, the canopy, and a version of yourself you've never met\u2014the one who builds fire from nothing, who reads the forest floor like a newspaper, who sleeps under stars that don't compete with city lights." },
+        { type: "paragraph", text: "Here's what you'll find out there:" },
+        { type: "list", items: [
+          "That you're more capable than you think. Not in a gym. In a place that actually pushes back. Where every meal is earned, every step is a choice, and every night is a victory.",
+          "That silence isn't empty\u2014it's full. The jungle hums. It breathes. It teaches you to listen in ways your city ears have forgotten.",
+          "That fear is just excitement in disguise. Your heart will race. Your palms will sweat. And you'll realize that feeling means you're finally, actually alive.",
+          "That you don't need much to be content. No gadgets. No luxuries. Just water, shelter, and the quiet satisfaction of knowing you made it through."
+        ] },
+
+        { type: "divider" },
+        { type: "quote", text: "There are no shortcuts to any place worth going.", attribution: "\u2014 Beverly Sills" },
+
+        { type: "divider" },
+        { type: "paragraph", text: "But here's the truth no one tells you:" },
+        { type: "paragraph", text: "The jungle won't change you. It will only reveal you. Strip away the noise, the distractions, the comfortable lies you tell yourself\u2014and show you exactly who you are when no one's watching." },
+        { type: "paragraph", text: "That might terrify you." },
+        { type: "paragraph", text: "Or it might be exactly what you've been looking for." },
+
+        { type: "divider" },
+        { type: "quote", text: "The world is big and I want to have a good look at it before it gets dark.", attribution: "\u2014 John Muir" },
+
+        { type: "divider" },
+        { type: "paragraph", text: "The question isn't whether you're fit enough, brave enough, or rich enough." },
+        { type: "paragraph", text: "The question is: Can you afford to go your whole life without knowing?" }
       ]
     },
 

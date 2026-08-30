@@ -26,7 +26,7 @@
 
   var VISITOR_GUIDE = CONTENT.visitorGuide || { title: "", subtitle: "", cards: [] };
   var ACT_FAC = CONTENT.activitiesFacilities || { title: "", subtitle: "", activitiesTitle: "", activities: [], facilitiesTitle: "", facilities: [] };
-  var WHY_VISIT = CONTENT.whyVisit || { title: "", subtitle: "", intro: "", journeys: [] };
+  var WHY_VISIT = CONTENT.whyVisit || { title: "", blocks: [] };
   var FOOTER = CONTENT.footer || { brandName: "", locationLine: "", contactTitle: "Contact Us", phone: "", email: "", followTitle: "Follow Us On", importantLinkTitle: "Important Link", refundPolicyLabel: "Refund Policy", copyright: "" };
   var REFUND_POLICY = CONTENT.refundPolicy || { title: "Refund Policy", intro: "", sections: [], promiseTitle: "", promiseText: [] };
 
@@ -869,31 +869,37 @@
           })
         )
       ),
-      WHY_VISIT.journeys && WHY_VISIT.journeys.length > 0 && h(
+      WHY_VISIT.blocks && WHY_VISIT.blocks.length > 0 && h(
         GlassCard, { className: "p-6 md:p-10" },
         h("h2", { className: "text-2xl md:text-3xl font-semibold text-center tracking-tight" }, WHY_VISIT.title),
-        WHY_VISIT.subtitle && h("p", { className: "mt-2 text-white/80 text-base font-medium text-center" }, WHY_VISIT.subtitle),
-        WHY_VISIT.intro && h("p", { className: "mt-4 text-white/60 text-sm leading-relaxed text-center max-w-[720px] mx-auto" }, WHY_VISIT.intro),
         h(
-          "div", { className: "mt-8 grid md:grid-cols-2 gap-5" },
-          WHY_VISIT.journeys.map(function (j) {
-            return h(
-              "div", { key: j.number, className: "rounded-[18px] bg-white/5 border border-white/10 p-6" },
-              h(
-                "div", { className: "flex items-center gap-3" },
-                h("span", { className: "text-2xl" }, j.emoji),
-                h("span", { className: "text-[11px] tracking-widest text-white/40 font-semibold" }, j.number, " —"),
-                h("h3", { className: "font-semibold text-[15px]" }, j.title)
-              ),
-              j.tagline && h("div", { className: "mt-3 text-white/80 text-[13px] font-medium italic" }, j.tagline),
-              j.description && h("p", { className: "mt-2 text-[13px] text-white/60 leading-relaxed" }, j.description),
-              j.experience && j.experience.length > 0 && h(
-                "div", { className: "mt-4 flex flex-wrap gap-2" },
-                j.experience.map(function (tag) {
-                  return h("span", { key: tag, className: "px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/20 text-[11px] text-emerald-300" }, tag);
+          "div", { className: "mt-8 max-w-[720px] mx-auto space-y-5" },
+          WHY_VISIT.blocks.map(function (block, i) {
+            if (block.type === "heading") {
+              return h("h3", { key: i, className: "text-lg md:text-xl font-semibold text-white pt-2" }, block.text);
+            }
+            if (block.type === "paragraph") {
+              return h("p", { key: i, className: "text-[14px] text-white/70 leading-relaxed" }, block.text);
+            }
+            if (block.type === "list") {
+              return h(
+                "ul", { key: i, className: "space-y-3 pl-1" },
+                (block.items || []).map(function (item, j) {
+                  return h("li", { key: j, className: "flex gap-2.5 text-[14px] text-white/70 leading-relaxed" }, h("span", { className: "text-emerald-400 font-bold flex-shrink-0" }, "•"), h("span", null, item));
                 })
-              )
-            );
+              );
+            }
+            if (block.type === "quote") {
+              return h(
+                "blockquote", { key: i, className: "border-l-2 border-emerald-400/50 pl-4 py-1 italic text-white/85 text-[15px] leading-relaxed" },
+                "\u201C" + block.text + "\u201D",
+                block.attribution && h("div", { className: "mt-2 text-[12px] not-italic text-white/50 tracking-wide" }, block.attribution)
+              );
+            }
+            if (block.type === "divider") {
+              return h("div", { key: i, className: "border-t border-white/10 my-2" });
+            }
+            return null;
           })
         )
       ),
