@@ -44,8 +44,10 @@
   <div id="root"></div>
   <!-- Back-to-home button (added on top of the site; does not modify the
        site's own app.js/config.js — it's a plain link that always returns
-       to the main home page one folder up). -->
-  <a href="../index.html" id="kc-back-home-btn" style="position:fixed;top:16px;left:16px;z-index:9999;display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:9999px;background:rgba(0,0,0,0.55);color:#fff;font:600 13px/1 -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif;text-decoration:none;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.2);box-shadow:0 4px 14px rgba(0,0,0,0.25);">
+       to the main home page one folder up). Positioned above the site's
+       own fixed Back/Next bar at the bottom so it doesn't overlap the
+       header. -->
+  <a href="../index.html" id="kc-back-home-btn" style="position:fixed;left:16px;bottom:96px;z-index:9999;display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:9999px;background:rgba(0,0,0,0.55);color:#fff;font:600 13px/1 -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif;text-decoration:none;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.2);box-shadow:0 4px 14px rgba(0,0,0,0.25);">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
     Back
   </a>
