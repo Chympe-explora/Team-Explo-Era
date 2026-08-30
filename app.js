@@ -249,7 +249,7 @@
           "div", { className: "mt-10 space-y-6 max-w-[720px] mx-auto" },
           (BOOKING.reasons || []).map(function (r, i) {
             return h(
-              "div", { key: i, className: "rounded-[18px] bg-white/5 border border-white/10 p-6" },
+              "div", { key: i, className: "pt-6 border-t border-white/10 first:pt-0 first:border-t-0" },
               h(
                 "div", { className: "flex items-center gap-3" },
                 r.emoji && h("span", { className: "text-2xl" }, r.emoji),
