@@ -99,8 +99,8 @@
     highlightRiverCrossing: "highlight-river-crossing.jpg",
 
     // ---- Waterfall photos ----
-    waterfallButterfly: "waterfall-butterfly.jpg",
-    waterfallButterfly2: "waterfall-butterfly-2.jpg",
+    waterfallButterfly: "waterfall-butterfly-real.jpg",
+    waterfallButterfly2: "waterfall-butterfly-real-2.jpg",
     waterfallLangam: "waterfall-langam.jpg",
     // Linching Falls & the Unnamed Waterfall: no photo exists yet on
     // purpose (per your instructions) — these stay as the "no
@@ -110,7 +110,7 @@
 
     // ---- Gallery photos ----
     gallery0: "gallery-route.jpg",
-    gallery1: "gallery-waterfall.jpg",
+    gallery1: "gallery-waterfall-real.jpg",
     gallery2: "gallery-trek.jpg",
     gallery3: "gallery-camp.jpg",
     gallery4: "gallery-river.jpg",
@@ -155,10 +155,10 @@
 
     // ---- On/off switches for whole sections ----
     sections: {
-      trustBar: true,
+      trustBar: false,          // moved to the main home page (combined with Krem Chympe's)
       visitorGuide: true,      // "Know Before You Go"
       activitiesFacilities: true,
-      ourStory: false,          // no origin-story timeline for this trip yet
+      ourStory: true,           // the "Our Story" timeline block, about how the expedition's waterfalls were found
       statsRow: true,
       meetGuide: true,
       waterfalls: true,        // NEW — "The Waterfalls of the Expedition"
@@ -182,7 +182,12 @@
       ecoTourismText: "Leave No Trace"
     },
 
-    storyTimeline: [],
+    storyTimeline: [
+      { year: "Discovery", title: "Found By Chance", desc: "Butterfly Falls was never part of the original route — it was found later, while an explorer searched the surrounding forest for firewood after planning to camp nearby." },
+      { year: "The Naming", title: "Named By Hunters", desc: "Langam Falls takes its name from the isolation and disorientation local hunters felt on first encountering it — the only name this waterfall has ever been known by." },
+      { year: "Local Knowledge", title: "Passed Down, Not Mapped", desc: "Linching Falls and the unnamed waterfall beyond it remain known chiefly through the hunters who have moved through this wilderness for years, rather than through any official map." },
+      { year: "Today", title: "The Expedition", desc: "These waterfalls now form the heart of a six-day wilderness expedition — reached only after real distance on foot, with camps pitched along the way." }
+    ],
 
     // ---- "About The Wilderness Expedition" (home page info block) ----
     destinationDetails: {
@@ -193,7 +198,7 @@
           icon: "mountain",
           label: "Not A Conventional Sightseeing Tour",
           description: "This is a six-day journey into the remote landscapes of Meghalaya, beginning at Brichyrnot Village and continuing from Khaddum into forests, rivers, rocky terrain and secluded wilderness camps.",
-          images: [window.KC_IMAGES.highlightRiverCrossing]
+          images: []
         },
         {
           icon: "water",
@@ -517,7 +522,7 @@
     logoImage: window.KC_IMAGES.logo,
 
     sectionImages: {
-      heroCave: window.KC_IMAGES.heroSide,
+      heroCave: window.KC_IMAGES.highlightRiverCrossing, // moved here from the "About The Wilderness" highlight card
       trekCard: window.KC_IMAGES.trekCard,
       campingCard: window.KC_IMAGES.expeditionPackageCard,
       sharedPackageCard: window.KC_IMAGES.expeditionPackageCard,
