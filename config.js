@@ -101,6 +101,15 @@
       sub: "From a hidden waterfall and cave system a short trek from Khaddum Village, to a 6-day wilderness expedition into untouched landscapes — we design guided trips into Meghalaya's least-visited corners."
     },
 
+    // ---- Visitors Rating bar (shown above Destinations) ----
+    visitorsRating: {
+      trustedText: "Trusted by 100+",
+      travelersText: "Travelers",
+      googleRatingText: "Visitors Rating 4.9",
+      safetyCertifiedText: "Safety Certified",
+      ecoTourismText: "Eco Tourism"
+    },
+
     // ---- Destinations ----
     destinations: {
       title: "Destinations",

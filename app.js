@@ -46,6 +46,12 @@
   var Phone = makeIcon([["path", { d: "M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" }]]);
   var Mail = makeIcon([["rect", { width: 20, height: 16, x: 2, y: 4, rx: 2 }], ["path", { d: "m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" }]]);
   var InstagramIcon = makeIcon([["rect", { width: 20, height: 20, x: 2, y: 2, rx: 5 }], ["path", { d: "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" }], ["line", { x1: 17.5, x2: 17.51, y1: 6.5, y2: 6.5 }]]);
+  var Star = makeIcon([["path", { d: "M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" }]]);
+  var Shield = makeIcon([["path", { d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" }]]);
+  var Award = makeIcon([
+    ["path", { d: "m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526" }],
+    ["circle", { cx: 12, cy: 8, r: 6 }]
+  ]);
 
   // ---------------------------------------------------------------------
   // Shared little components
@@ -162,6 +168,26 @@
         h(
           "div", { className: "mt-8 flex flex-wrap gap-3" },
           h("button", { onClick: function () { goTo("destinations"); }, className: "bg-[#2E8B57] hover:bg-[#257a4b] px-7 py-3 rounded-full text-sm font-semibold flex items-center gap-2" }, "Explore Destinations ", h(ArrowRight, { size: 16 }))
+        )
+      )
+    );
+
+    // ---- Visitors Rating (shown above Destinations) --------------------
+    var RATING = CONTENT.visitorsRating || {};
+    var visitorsRating = h(
+      "section", { className: "scroll-mt-24" },
+      h(
+        GlassCard, { className: "px-6 py-4 flex flex-wrap items-center justify-between gap-4" },
+        h(
+          "div", { className: "flex items-center gap-3" },
+          h("div", { className: "flex -space-x-2" }, [0, 1, 2, 3].map(function (p) { return h("img", { key: p, src: "https://i.pravatar.cc/100?img=" + (10 + p), className: "w-8 h-8 rounded-full border-2 border-black/30" }); })),
+          h("div", { className: "text-[13px]" }, h("span", { className: "font-semibold" }, RATING.trustedText), " ", h("span", { className: "text-white/60" }, RATING.travelersText))
+        ),
+        h(
+          "div", { className: "flex flex-wrap gap-6 text-[13px]" },
+          RATING.googleRatingText && h("span", { className: "flex items-center gap-2" }, h(Star, { size: 14, className: "text-amber-400" }), " " + RATING.googleRatingText),
+          RATING.safetyCertifiedText && h("span", { className: "flex items-center gap-2" }, h(Shield, { size: 14, className: "text-emerald-400" }), " " + RATING.safetyCertifiedText),
+          RATING.ecoTourismText && h("span", { className: "flex items-center gap-2" }, h(Award, { size: 14 }), " " + RATING.ecoTourismText)
         )
       )
     );
@@ -385,7 +411,7 @@
       ),
       header,
       page === "home"
-        ? h("main", { className: "max-w-[1280px] mx-auto px-4 md:px-6 pb-32 space-y-16 pt-6" }, home, destinations, experiences, booking, about, footer)
+        ? h("main", { className: "max-w-[1280px] mx-auto px-4 md:px-6 pb-32 space-y-16 pt-6" }, home, visitorsRating, destinations, experiences, booking, about, footer)
         : refundPolicyPage,
       h("style", null, "\n        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap');\n        *{font-family:Inter, Poppins, sans-serif}\n        ::-webkit-scrollbar{width:6px;height:6px}\n        ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:99px}\n        .scroll-mt-24{scroll-margin-top:6rem}\n      ")
     );
