@@ -115,14 +115,6 @@
         <div class="priceField"><label>Lunch thali price (₹)</label><input type="number" id="p_sharedTour_lunchThaliPrice"></div>
       </div>
       <div class="card">
-        <h2>Camping</h2>
-        <div class="priceField"><label>Tent (per tent, ₹)</label><input type="number" id="p_camping_tentUnit"></div>
-        <div class="priceField"><label>Meals (per person, ₹)</label><input type="number" id="p_camping_mealsPerPerson"></div>
-        <div class="priceField"><label>Overnight guide (₹)</label><input type="number" id="p_camping_overnightGuide"></div>
-        <div class="priceField"><label>4x4 Jeep (₹)</label><input type="number" id="p_camping_jeep"></div>
-        <div class="priceField"><label>Activities (per person, ₹)</label><input type="number" id="p_camping_activitiesPerPerson"></div>
-      </div>
-      <div class="card">
         <h2>Private Package</h2>
         <div class="priceField"><label>4x4 Jeep (₹)</label><input type="number" id="p_privatePackage_jeep"></div>
         <div class="priceField"><label>Local guide (₹)</label><input type="number" id="p_privatePackage_guide"></div>
@@ -261,7 +253,6 @@
   ];
   var DEFAULT_PRICES = {
     sharedTour: { perPerson: 2600, lunchThaliPrice: 380, thaliTypes: JSON.parse(JSON.stringify(DEFAULT_THALI_TYPES)) },
-    camping: { tentUnit: 1000, mealsPerPerson: 500, overnightGuide: 2000, jeep: 4000, activitiesPerPerson: 1500 },
     privatePackage: { jeep: 4000, guide: 1500, adventurePerPerson: 1500, lunchThaliPrice: 380, campingTent: 1000, campingMealsPerPerson: 380, overnightGuide: 2000, thaliTypes: JSON.parse(JSON.stringify(DEFAULT_THALI_TYPES)) },
     childFreeAge: 10,
     minAdvance: 500
@@ -348,7 +339,6 @@
   // --------------------------------------------------------------------
   var PRICE_PATHS = [
     ['sharedTour', 'perPerson'], ['sharedTour', 'lunchThaliPrice'],
-    ['camping', 'tentUnit'], ['camping', 'mealsPerPerson'], ['camping', 'overnightGuide'], ['camping', 'jeep'], ['camping', 'activitiesPerPerson'],
     ['privatePackage', 'jeep'], ['privatePackage', 'guide'], ['privatePackage', 'adventurePerPerson'], ['privatePackage', 'lunchThaliPrice'],
     ['privatePackage', 'campingTent'], ['privatePackage', 'campingMealsPerPerson'], ['privatePackage', 'overnightGuide']
   ];
@@ -358,7 +348,7 @@
     var base = JSON.parse(JSON.stringify(DEFAULT_PRICES));
     base.bambooMenu = JSON.parse(JSON.stringify(DEFAULT_BAMBOO_MENU));
     if (stored) {
-      ['sharedTour', 'camping', 'privatePackage'].forEach(function (k) { if (stored[k]) Object.assign(base[k], stored[k]); });
+      ['sharedTour', 'privatePackage'].forEach(function (k) { if (stored[k]) Object.assign(base[k], stored[k]); });
       if (stored.childFreeAge !== undefined) base.childFreeAge = stored.childFreeAge;
       if (stored.minAdvance !== undefined) base.minAdvance = stored.minAdvance;
       if (stored.bambooMenu) base.bambooMenu = stored.bambooMenu;

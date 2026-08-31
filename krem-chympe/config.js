@@ -94,27 +94,7 @@
         overnightGuide: 2000        // ₹ per booking, mandatory once camping is chosen
       },
 
-      // ---- Camping ----
-      camping: {
-        // Everything below is priced à la carte and simply added up — there
-        // is no hidden "package" logic. A typical booking (1 tent + 1
-        // person's meal + the mandatory guide) comes to ₹3,500
-        // (1,000 + 500 + 2,000), which is why that figure is used for
-        // marketing/"starting from" display, but a visitor who declines the
-        // tent and meal and only wants the guide is simply charged ₹2,000.
-        tent: 3500,            // marketing "starting from" display price only — not used directly in the calculator
-        tentUnit: 1000,        // ₹ per tent selected (visitor can choose 0 or more)
-        tentCapacity: 2,       // persons per tent
-        mealsPerPerson: 500,   // ₹ per person, only charged if meals are selected
-        overnightGuide: 2000,  // ₹ per booking, mandatory — always charged, regardless
-                                // of how many tents or meals are selected
-        jeep: 4000,             // ₹ per group — optional 4x4 pickup & drop service
-        activitiesPerPerson: 1500 // ₹ per person — optional adventure activities bundle
-                                   // (boat rafting, waterfall visit, swimming, cave
-                                   // exploration, life jacket, basic first aid, entry fee)
-      },
-
-      // ---- Traditional Bamboo Dishes (Camping add-on menu) ----
+      // ---- Traditional Bamboo Dishes (Private Package camping add-on menu) ----
       bambooMenu: [
         { id: "chicken500",   name: "Fresh Bamboo Chicken (500g)",     price: 699 },
         { id: "chicken1kg",   name: "Fresh Bamboo Chicken (1kg)",      price: 890 },
@@ -165,7 +145,6 @@
       heroCave:    "Blue water cave.jpg",
       trekCard:    "Trekking.jpg",
       privatePackageCard: "River Confluence.jpg",
-      campingCard: "Camping un ex m.jpg",
       caveEntranceCard: "Cave entrance.jpg",
 
       // Guide photo and site logo
@@ -215,9 +194,7 @@
       // ---- Prices (in ₹) ----
       prices: {
         trek: 1500,          // shown as the "starting from" trek price
-        camping: 3500,       // shown as the "starting from" camping price
         guide: 1500,         // mandatory guide fee, charged on every booking
-        campingBase: 2000,   // reserved, not currently charged
         vehicleRainy: 2000,  // 4x4 vehicle - Rainy Half Way option
         vehicleWinter: 4000, // 4x4 vehicle - Winter Full Way option
         boat: 1000,          // reserved, not currently charged
@@ -238,26 +215,17 @@
         { id: "egg_curry",    name: "Egg Curry",     price: 150, type: "non-veg" }
       ],
 
-      // ---- Camping gear options (shown only for Camping bookings) ----
-      campingItems: [
-        { id: "tent",    name: "Tent (2 Person)",    price: 500 },
-        { id: "torch",   name: "Torch + Batteries",   price: 50 },
-        { id: "blanket", name: "Sleeping Blanket",   price: 100 },
-        { id: "mat",     name: "Sleeping Mat",        price: 50 }
-      ],
-
       // ---- On/off switches for whole sections. Set any of these to
       // false to remove that section from the site — no other file
       // needs to be touched. ----
       sections: {
-        trustBar: true,       // the "Trusted by 1000+ Travelers / Google Rating..." bar under the hero
+        trustBar: false,      // moved to the main home page (combined with Wilderness Expedition's)
         visitorGuide: true,   // the "Know Before You Go" first-time-visitor info block
         activitiesFacilities: true, // the "Activities & Facilities" block
         ourStory: true,       // the "Our Story" timeline block
         statsRow: true,       // the 10.5KM / 3-4 Hrs / 50+ / 4.9 stat tiles
         meetGuide: true,      // the "Meet Your Guide" card
         sharedTourCard: true, // the "Shared Tour" package card
-        campingCard: true,    // the "Camping Experience" package card
         privatePackageCard: true, // the "Private Package" package card
         packagesTrustRow: true, // "Safe & Secure / Local Guides / Eco Friendly / 4.9 Rating" strip
         gallery: true         // the whole "Our Gallery" block
@@ -499,7 +467,7 @@
         trustRow: ["Safe & Secure", "Local Guides", "Eco Friendly", "4.9 Rating"]
       },
 
-      // ---- Package cards (Shared Tour / Camping / Guide Only) ----
+      // ---- Package cards (Shared Tour / Guide Only) ----
       packages: {
         sharedTour: {
           badge: "Most Popular",
@@ -514,19 +482,6 @@
             "Entry Fee, Life Jacket & Basic First Aid",
             "Lunch thali optional",
             "Children under {childFreeAge} free (life jacket & entry fee still apply)"
-          ]
-        },
-        camping: {
-          badge: "Overnight",
-          name: "Camping",
-          priceUnit: "Per person",
-          features: [
-            "1 Tent, sleeping mats, camping chairs, torch & a bonfire",
-            "Mandatory overnight guide",
-            "Meals/person available (veg dinner + breakfast)",
-            "Optional 4×4 jeep pickup & drop",
-            "Optional adventure activities (rafting, waterfall, cave & more)",
-            "Fresh bamboo-cooked dishes available(Optional)"
           ]
         },
         guideOnly: {
@@ -603,56 +558,6 @@
         ]
       },
 
-      // ---- Camping booking form text ----
-      campingBooking: {
-        adultsLabel: "Adults",
-        childrenLabel: "Children",
-        packageIncludesTitle: "Camping Essentials",
-        includesLabel: "Available:",
-        packageIncludesItems: [
-          "Tent, sleeping mats, camping chairs & torch",
-          "Meals (veg dinner + breakfast)",
-          "Mandatory overnight guide"
-        ],
-        tentLabel: "Tents",
-        tentPriceUnit: "/tent",
-        tentNote: "Select the number of tents you'd like for your stay.",
-        mealsLabelPrefix: "Meals (",
-        mealsLabelSuffix: "/person)",
-        mealsIncludes: "Includes: vegetarian dinner and breakfast with 2 servings of Maggi.",
-        mealsNote: "Note: Vegetarian meals only.",
-        mealsYes: "Yes",
-        mealsNo: "No",
-        guideTitle: "Overnight Guide",
-        guideNoteTemplate: "Note: An overnight guide is mandatory for all camping bookings and covers guest safety and campsite supervision. Camping without a guide is not permitted. Children under {childFreeAge} are not charged for meals or activities, except a small life jacket ({childJacketFee}) and entry fee ({childEntryFee}) if activities are selected.",
-        guideMandatoryLabel: "yes (mandatory)",
-        jeepTitle: "4×4 Jeep (Pickup & Drop)",
-        jeepPriceUnit: " Per Group",
-        jeepNote: "Note: Optional pickup and drop service by 4×4 jeep, charged per group, not per person.",
-        jeepYesLabel: "yes",
-        jeepNoLabel: "No",
-        activitiesTitle: "Adventure Activities",
-        activitiesPriceUnit: "/person",
-        activitiesIncludes: [
-    "Scenic Forest Drive",
-    "Guided Forest Trek",
-    "Bridge Viewpoint",
-    "Bamboo Rafting",
-    "700m Cave Exploration",
-    "Cave Cliff Jumping",
-    "Cave Swimming",
-    "Khaddum Waterfall Visit",
-    "Waterfall Swimming",
-    "Campfire",
-    "Stargazing",
-    "Overnight Camping",
-    "Sunrise Nature Walk"
-],
-        activitiesNote: "Note: Optional adventure activities bundle, charged per person.",
-        activitiesYesLabel: "yes",
-        activitiesNoLabel: "No",
-        bambooDishesTitle: " Traditional Bamboo Dishes(optional)"
-      },
       // ---- Private Package booking form text ----
       privatePackageBooking: {
         peopleLabel: "Number of People",
@@ -764,7 +669,6 @@
       sectionImages: {
         heroCave: window.KC_IMAGES.heroCave,
         trekCard: window.KC_IMAGES.trekCard,
-        campingCard: window.KC_IMAGES.campingCard,
         sharedPackageCard: window.KC_IMAGES.caveEntranceCard,
         privatePackageCard: window.KC_IMAGES.privatePackageCard
       },
@@ -939,7 +843,6 @@
 
         guideMandatory: "Guide Mandatory",
         vehicleLabel: "4x4 Vehicle",
-        campingGear: " Camping Gear",
         mealOptions: " Meal Options",
         noVehicleLabel: "No Vehicle",
         freeWalkLabel: "Free / Walk",
@@ -1006,10 +909,6 @@
 
   need(window.KC_PRICES, "sharedTour.perPerson", "number");
   need(window.KC_PRICES, "sharedTour.lunchThaliPrice", "number");
-  need(window.KC_PRICES, "camping.tentUnit", "number");
-  need(window.KC_PRICES, "camping.mealsPerPerson", "number");
-  need(window.KC_PRICES, "camping.overnightGuide", "number");
-  need(window.KC_PRICES, "camping.jeep", "number");
   need(window.KC_PRICES, "privatePackage.jeep", "number");
   need(window.KC_PRICES, "privatePackage.guide", "number");
   need(window.KC_PRICES, "childFreeAge", "number");

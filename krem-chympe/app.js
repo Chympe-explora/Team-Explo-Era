@@ -18,7 +18,7 @@
   var SECTIONS = Object.assign({
     trustBar: true, visitorGuide: true, activitiesFacilities: true, ourStory: true, statsRow: true, meetGuide: true,
     destinationDetails: true,
-    sharedTourCard: true, campingCard: true, privatePackageCard: true,
+    sharedTourCard: true, privatePackageCard: true,
     packagesTrustRow: true, gallery: true
   }, CONTENT.sections || {});
 
@@ -277,36 +277,6 @@
     };
   }
 
-  function campingTotals(f) {
-    var payingChildren = payingChildrenCount(f.childAges);
-    var payingHeads = Number(f.adults || 0) + payingChildren;
-    var freeChildren = f.childAges.length - payingChildren;
-    // Every line below is priced à la carte and simply summed — a visitor
-    // can select 0 tents and decline meals and still book, paying only the
-    // mandatory guide fee.
-    var tentsSelected = Math.max(0, Number(f.tents || 0));
-    var tentCost = tentsSelected * PRICES.camping.tentUnit;
-    var mealsCost = f.meals === "yes" ? payingHeads * PRICES.camping.mealsPerPerson : 0;
-    var guideCost = PRICES.camping.overnightGuide; // mandatory, always charged
-    var jeepCost = f.jeep === "yes" ? PRICES.camping.jeep : 0;
-    var activitiesCost = f.activities === "yes" ? payingHeads * PRICES.camping.activitiesPerPerson : 0;
-    // Free children only need a life jacket + entry fee if they're
-    // actually joining the adventure activities.
-    var childFeeCost = f.activities === "yes" ? freeChildren * freeChildFee() : 0;
-    var foodLines = PRICES.bambooMenu.map(function (item) {
-      var qty = Number((f.foodQty || {})[item.id] || 0);
-      return { id: item.id, name: item.name, qty: qty, price: item.price, cost: qty * item.price };
-    });
-    var foodCost = foodLines.reduce(function (sum, l) { return sum + l.cost; }, 0);
-    return {
-      payingHeads: payingHeads, tentsSelected: tentsSelected, tentCost: tentCost,
-      mealsCost: mealsCost, guideCost: guideCost, jeepCost: jeepCost, activitiesCost: activitiesCost,
-      childFeeCost: childFeeCost,
-      foodLines: foodLines, foodCost: foodCost,
-      grandTotal: tentCost + mealsCost + guideCost + jeepCost + activitiesCost + childFeeCost + foodCost
-    };
-  }
-
   function guideOnlyTotals() {
     return { price: PRICES.guideOnly.flat, grandTotal: PRICES.guideOnly.flat };
   }
@@ -393,8 +363,6 @@
     var sharedTourState = useState({ adults: 2, children: 0, childAges: [], lunchQty: {} });
     var sharedTourForm = sharedTourState[0], setSharedTourForm = sharedTourState[1];
 
-    var campingState = useState({ adults: 2, children: 0, childAges: [], tents: 1, meals: "no", jeep: "no", activities: "no", foodQty: {} });
-    var campingForm = campingState[0], setCampingForm = campingState[1];
 
     var privateState = useState({ people: 1, jeep: "no", adventure: "yes", lunchQty: {}, camping: "no", tents: 1, campingMeals: "yes", bambooQty: {} });
     var privateForm = privateState[0], setPrivateForm = privateState[1];
@@ -527,7 +495,6 @@
           package: packageLabel,
           people:
             pkg === "sharedTour" ? (totals.payingPersons || 0) + (totals.freeChildren || 0) :
-            pkg === "camping" ? totals.payingHeads :
             pkg === "privatePackage" ? totals.people :
             null,
           total: grandTotal,
@@ -539,16 +506,14 @@
     }
 
     var packageLabel = pkg === "sharedTour" ? (CONTENT.packages.sharedTour && CONTENT.packages.sharedTour.name) || "Shared Package"
-      : pkg === "camping" ? (CONTENT.packages.camping && CONTENT.packages.camping.name) || "Camping Package"
       : pkg === "privatePackage" ? (CONTENT.packages.privatePackage && CONTENT.packages.privatePackage.name) || "Private Package"
       : "";
 
     var totals = useMemo(function () {
       if (pkg === "sharedTour") return sharedTourTotals(sharedTourForm);
-      if (pkg === "camping") return campingTotals(campingForm);
       if (pkg === "privatePackage") return privatePackageTotals(privateForm);
       return { grandTotal: 0 };
-    }, [pkg, sharedTourForm, campingForm, privateForm]);
+    }, [pkg, sharedTourForm, privateForm]);
 
     var grandTotal = totals.grandTotal || 0;
     var balanceLeft = Math.max(0, grandTotal - Number(advance || 0));
@@ -575,17 +540,6 @@
         (totals.lunchLines || []).forEach(function (l) { if (l.qty > 0) stLines.push([l.name + " x" + l.qty, money(l.cost)]); });
         if (totals.childFeeCost > 0) stLines.push(["Life Jacket & Entry Fee (" + totals.freeChildren + " free child" + (totals.freeChildren === 1 ? "" : "ren") + ")", money(totals.childFeeCost)]);
         return stLines;
-      }
-      if (pkg === "camping") {
-        var lines = [];
-        if (totals.tentsSelected > 0) lines.push(["Tent" + (totals.tentsSelected === 1 ? "" : "s") + " x" + totals.tentsSelected, money(totals.tentCost)]);
-        lines.push(["Overnight Guide (mandatory)", money(totals.guideCost)]);
-        if (totals.mealsCost > 0) lines.push(["Meals (" + totals.payingHeads + " people)", money(totals.mealsCost)]);
-        if (totals.jeepCost > 0) lines.push(["4x4 Jeep (Pickup & Drop)", money(totals.jeepCost)]);
-        if (totals.activitiesCost > 0) lines.push(["Adventure Activities (" + totals.payingHeads + " people)", money(totals.activitiesCost)]);
-        if (totals.childFeeCost > 0) lines.push(["Life Jacket & Entry Fee (free children)", money(totals.childFeeCost)]);
-        totals.foodLines.forEach(function (l) { if (l.qty > 0) lines.push([l.name + " x" + l.qty, money(l.cost)]); });
-        return lines;
       }
       if (pkg === "privatePackage") {
         var ppLines = [];
@@ -633,7 +587,6 @@
 
     function whatsappLink() {
       var group = pkg === "sharedTour" ? formatGroup(sharedTourForm.adults, sharedTourForm.childAges)
-        : pkg === "camping" ? formatGroup(campingForm.adults, campingForm.childAges)
         : pkg === "privatePackage" ? (privateForm.people + " Guest" + (privateForm.people === 1 ? "" : "s"))
         : "";
       var paymentMethod = payTab === "qr" ? "QR Code" : payTab === "upi" ? "UPI" : "Bank Transfer";
@@ -957,7 +910,7 @@
     }
 
     var PKG = CONTENT.packages || {};
-    var pkgFillValues = { childFreeAge: PRICES.childFreeAge, mealsPerPerson: money(PRICES.camping.mealsPerPerson), overnightGuide: money(PRICES.camping.overnightGuide), childJacketFee: money(PRICES.childJacketFee), childEntryFee: money(PRICES.childEntryFee) };
+    var pkgFillValues = { childFreeAge: PRICES.childFreeAge, childJacketFee: money(PRICES.childJacketFee), childEntryFee: money(PRICES.childEntryFee) };
     var PACKAGES_PAGE = CONTENT.packagesPage || { subtitle: "", trustRow: [] };
 
     var sharedTourCard = SECTIONS.sharedTourCard && h(
@@ -980,29 +933,6 @@
           PKG.sharedTour.features.map(function (f) { return IncludedItem(fill(f, pkgFillValues)); })
         ),
         h("button", { onClick: function () { goToPackage("sharedTour"); }, className: "mt-6 w-full bg-[#2E8B57] hover:bg-[#257a4b] py-3 rounded-full font-medium flex items-center justify-center gap-2" }, t("bookNow", "Book Now"), " ", h(ArrowRight, { size: 16 }))
-      )
-    );
-
-    var campingCard = SECTIONS.campingCard && h(
-      GlassCard, { className: "overflow-hidden group" },
-      h(
-        "div", { className: "relative h-[220px] overflow-hidden" },
-        h("img", { src: CONTENT.sectionImages.campingCard, className: "w-full h-full object-cover group-hover:scale-105 transition duration-700" }),
-        h("div", { className: "absolute top-4 left-4 px-3 py-1 rounded-full bg-white/15 backdrop-blur text-xs border border-white/10 flex items-center gap-1" }, h(Tent, { size: 12 }), " " + PKG.camping.badge),
-        h("div", { className: "absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/70 to-transparent" })
-      ),
-      h(
-        "div", { className: "p-6" },
-        h(
-          "div", { className: "flex justify-between items-start" },
-          h("h3", { className: "text-xl font-semibold" }, PKG.camping.name),
-          h("div", { className: "text-right" }, h("div", { className: "text-xl font-bold" }, money(PRICES.camping.tent)), h("div", { className: "text-[11px] text-white/50" }, PKG.camping.priceUnit))
-        ),
-        h(
-          "ul", { className: "mt-4 space-y-2 text-[13px] text-white/70" },
-          PKG.camping.features.map(function (f) { return IncludedItem(fill(f, pkgFillValues)); })
-        ),
-        h("button", { onClick: function () { goToPackage("camping"); }, className: "mt-6 w-full bg-white text-black hover:bg-white/90 py-3 rounded-full font-medium flex items-center justify-center gap-2" }, t("bookNow", "Book Now"), " ", h(ArrowRight, { size: 16 }))
       )
     );
 
@@ -1041,7 +971,7 @@
         h("h2", { className: "text-3xl md:text-4xl font-bold" }, t("ourAdventurePackages", "Our Adventure Packages")),
         h("p", { className: "text-white/60 mt-3 text-sm" }, PACKAGES_PAGE.subtitle)
       ),
-      h("div", { className: "grid md:grid-cols-2 lg:grid-cols-3 gap-6" }, sharedTourCard, campingCard, privatePackageCard),
+      h("div", { className: "grid md:grid-cols-2 lg:grid-cols-3 gap-6" }, sharedTourCard, privatePackageCard),
       SECTIONS.packagesTrustRow && h(
         GlassCard, { className: "px-6 py-4 flex flex-wrap justify-center gap-6 text-[13px] text-white/70" },
         PACKAGES_PAGE.trustRow.map(function (label, i) {
@@ -1089,85 +1019,6 @@
             key: th.id, name: th.name, price: PRICES.sharedTour.lunchThaliPrice, qty: qty,
             onChange: function (v) { var next = Object.assign({}, sharedTourForm.lunchQty); next[th.id] = v; setSharedTourForm(Object.assign({}, sharedTourForm, { lunchQty: next })); }
           });
-        }))
-      )
-    );
-
-    var CB = CONTENT.campingBooking || {};
-    var campingForm2 = pkg === "camping" && h(
-      "div", { className: "mt-8 space-y-5" },
-      h(
-        "div", { className: "grid md:grid-cols-2 gap-5" },
-        h("label", { className: "space-y-2 block" }, h("span", { className: "text-xs text-white/60" }, CB.adultsLabel), h("div", { className: "flex items-center justify-between px-4 py-2 rounded-xl bg-white/5 border border-white/10" }, h("span", { className: "text-sm" }, campingForm.adults, " " + CB.adultsLabel), h(Stepper, { value: campingForm.adults, min: 1, onChange: function (v) { setCampingForm(Object.assign({}, campingForm, { adults: v })); } }))),
-        h("label", { className: "space-y-2 block" }, h("span", { className: "text-xs text-white/60" }, CB.childrenLabel), h("div", { className: "flex items-center justify-between px-4 py-2 rounded-xl bg-white/5 border border-white/10" }, h("span", { className: "text-sm" }, campingForm.children, " " + CB.childrenLabel), h(Stepper, { value: campingForm.children, onChange: function (v) { setCampingForm(Object.assign({}, campingForm, { children: v, childAges: syncAges(campingForm.childAges, v) })); } })))
-      ),
-      h(ChildAgesInput, { count: campingForm.children, ages: campingForm.childAges, onChange: function (ages) { setCampingForm(Object.assign({}, campingForm, { childAges: ages })); } }),
-      h(
-        GlassCard, { className: "p-5 !rounded-[16px] text-[13px] text-white/70" },
-        h("div", { className: "font-medium text-white mb-2" }, CB.packageIncludesTitle),
-        h("div", { className: "text-white/70" }, CB.includesLabel || "Includes:"),
-        h("ul", { className: "mt-1 text-xs text-white/50 list-disc pl-5 space-y-0.5" }, (CB.packageIncludesItems || []).map(function (it) { return h("li", { key: it }, it); }))
-      ),
-      h(
-        GlassCard, { className: "p-5 !rounded-[16px] space-y-2" },
-        h("div", { className: "flex justify-between items-baseline" }, h("div", { className: "font-medium" }, CB.tentLabel || "Tents"), h("div", { className: "text-xs text-white/50" }, money(PRICES.camping.tentUnit) + (CB.tentPriceUnit || "/tent"))),
-        h("div", { className: "text-xs text-white/50" }, CB.tentNote),
-        h("div", { className: "flex items-center justify-between px-4 py-2 rounded-xl bg-white/5 border border-white/10" },
-          h("span", { className: "text-sm" }, campingForm.tents, " tent" + (campingForm.tents === 1 ? "" : "s")),
-          h(Stepper, { value: campingForm.tents, min: 0, onChange: function (v) { setCampingForm(Object.assign({}, campingForm, { tents: v })); } })
-        )
-      ),
-      h(
-        "div", { className: "grid md:grid-cols-1 gap-5" },
-        h(
-          "div", { className: "space-y-2" },
-          h("span", { className: "text-xs text-white/60" }, CB.mealsLabelPrefix + money(PRICES.camping.mealsPerPerson) + CB.mealsLabelSuffix),
-          h("div", { className: "text-xs text-white/50" }, CB.mealsIncludes),
-          h("div", { className: "text-xs text-white/50" }, CB.mealsNote),
-          h(
-            "div", { className: "flex gap-2" },
-            h("button", { onClick: function () { setCampingForm(Object.assign({}, campingForm, { meals: "yes" })); }, className: "flex-1 px-4 py-2.5 rounded-xl border text-xs " + (campingForm.meals === "yes" ? "bg-white text-black border-white" : "bg-white/5 border-white/10") }, CB.mealsYes),
-            h("button", { onClick: function () { setCampingForm(Object.assign({}, campingForm, { meals: "no" })); }, className: "flex-1 px-4 py-2.5 rounded-xl border text-xs " + (campingForm.meals === "no" ? "bg-white text-black border-white" : "bg-white/5 border-white/10") }, CB.mealsNo)
-          )
-        )
-      ),
-      h(
-        GlassCard, { className: "p-5 !rounded-[16px] space-y-3" },
-        h("div", { className: "flex justify-between items-baseline" }, h("div", { className: "font-medium" }, CB.guideTitle), h("div", { className: "text-xs text-white/50" }, money(PRICES.camping.overnightGuide))),
-        h("div", { className: "text-xs text-white/50" }, fill(CB.guideNoteTemplate, { overnightGuide: money(PRICES.camping.overnightGuide), childFreeAge: PRICES.childFreeAge })),
-        h(RadioRow, { selected: true, disabled: true, label: CB.guideMandatoryLabel })
-      ),
-      h(
-        GlassCard, { className: "p-5 !rounded-[16px] space-y-3" },
-        h("div", { className: "flex justify-between items-baseline" }, h("div", { className: "font-medium" }, CB.jeepTitle), h("div", { className: "text-xs text-white/50" }, money(PRICES.camping.jeep) + CB.jeepPriceUnit)),
-        h("div", { className: "text-xs text-white/50" }, CB.jeepNote),
-        h(
-          "div", { className: "space-y-2" },
-          h(RadioRow, { selected: campingForm.jeep === "yes", label: CB.jeepYesLabel, priceLabel: "(+" + money(PRICES.camping.jeep) + ")", onClick: function () { setCampingForm(Object.assign({}, campingForm, { jeep: "yes" })); } }),
-          h(RadioRow, { selected: campingForm.jeep === "no", label: CB.jeepNoLabel, onClick: function () { setCampingForm(Object.assign({}, campingForm, { jeep: "no" })); } })
-        )
-      ),
-      h(
-        GlassCard, { className: "p-5 !rounded-[16px] space-y-3" },
-        h("div", { className: "flex justify-between items-baseline" }, h("div", { className: "font-medium" }, CB.activitiesTitle), h("div", { className: "text-xs text-white/50" }, money(PRICES.camping.activitiesPerPerson) + CB.activitiesPriceUnit)),
-        h("ul", { className: "text-xs text-white/50 list-disc pl-5 space-y-0.5" }, (CB.activitiesIncludes || []).map(function (it) { return h("li", { key: it }, it); })),
-        h("div", { className: "text-xs text-white/50" }, CB.activitiesNote),
-        h(
-          "div", { className: "space-y-2" },
-          h(RadioRow, { selected: campingForm.activities === "yes", label: CB.activitiesYesLabel, priceLabel: "(+" + money(PRICES.camping.activitiesPerPerson) + "/person)", onClick: function () { setCampingForm(Object.assign({}, campingForm, { activities: "yes" })); } }),
-          h(RadioRow, { selected: campingForm.activities === "no", label: CB.activitiesNoLabel, onClick: function () { setCampingForm(Object.assign({}, campingForm, { activities: "no" })); } })
-        )
-      ),
-      h(
-        "details", { className: "group p-4 rounded-[16px] bg-white/5 border border-white/10", open: true },
-        h("summary", { className: "flex justify-between items-center cursor-pointer list-none" }, h("span", { className: "text-sm font-medium flex items-center gap-2" }, h(Utensils, { size: 16 }), CB.bambooDishesTitle), h(ChevronDown, { size: 16, className: "group-open:rotate-180 transition" })),
-        h("div", { className: "mt-4 grid md:grid-cols-2 gap-3" }, PRICES.bambooMenu.map(function (item) {
-          var qty = campingForm.foodQty[item.id] || 0;
-          return h(
-            "div", { key: item.id, className: "flex items-center justify-between px-3 py-2 rounded-xl bg-white/5 border border-white/10" },
-            h("div", null, h("div", { className: "text-[13px]" }, item.name), h("div", { className: "text-xs text-white/50" }, money(item.price))),
-            h(Stepper, { value: qty, onChange: function (v) { var nextQty = Object.assign({}, campingForm.foodQty); nextQty[item.id] = v; setCampingForm(Object.assign({}, campingForm, { foodQty: nextQty })); } })
-          );
         }))
       )
     );
@@ -1327,7 +1178,7 @@
         GlassCard, { className: "p-6 md:p-8" },
         h("div", { className: "flex items-center gap-3" }, h("div", { className: "w-8 h-8 rounded-full flex items-center justify-center bg-[#2E8B57]" }, h(Compass, { size: 16 })), h("h2", { className: "text-2xl font-semibold" }, packageLabel, " Booking")),
         h("div", { className: "mt-8" }, contactFields),
-        sharedTourForm2, campingForm2, privatePackageForm2,
+        sharedTourForm2, privatePackageForm2,
         h(
           "button",
           {
@@ -1340,7 +1191,7 @@
       )
     );
 
-    // ---- Page 4: Pricing / invoice calculator (Shared Tour & Camping) --
+    // ---- Page 4: Pricing / invoice calculator --
     var page4 = page === 4 && h(
       "main", { className: "max-w-[1280px] mx-auto px-4 md:px-6 pb-32 space-y-6" },
       h(GlassCard, { className: "p-8 text-center" }, h("h2", { className: "text-3xl font-bold" }, t("pricingFacilities", "Pricing & Facilities")), h("p", { className: "text-white/60 text-sm mt-2" }, packageLabel, " — itemized invoice")),
